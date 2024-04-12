@@ -2,6 +2,8 @@
 import java.util.Hashtable; 
 import java.util.Stack;
 
+import javax.sound.midi.Soundbank;
+
 import java.util.Scanner;
 
 public class SurgicalRobot implements Contract{
@@ -72,6 +74,7 @@ public class SurgicalRobot implements Contract{
      */
     public void grab(String item){ //Says function of object in canneddList
         System.out.println("I just grabbed the " + item);
+        rest(1000);
         performAction("Grab");
         //Checks if item is in list of functions and shows function if available.
         //Can make doctor say its function if not there
@@ -79,20 +82,24 @@ public class SurgicalRobot implements Contract{
             System.out.println(this.functions.get(item));
         }
         else{
-            System.out.println("Do you want to add the function of " + item + " to the library?");
+            System.out.println("Do you want to add the function of " + item + " to the library?\nEnter Yes or No");
             String operator = input.nextLine();
+            rest(1000); //Delays the program for 1s
             if (operator.toLowerCase().equals("yes")){
                 //Ask doctor for function using scanner
                 System.out.println("What's the function of " + item + "? Start with they are or it is");
                 operator = input.nextLine();
                 //Adds function to hashtable of functions
                 this.functions.put(item, operator);
+                rest(1000);
                 System.out.println("Added!");
             }
             else if(operator.toLowerCase().equals("no")){
+                rest(1000);
                 System.out.println("Okay. Call .addFunction() whenever you want to add the function of " + item + " to the library.");
             }
             else{
+                rest(1000);
                 System.out.println("I didn't quite get that.");
         }
     }
@@ -105,7 +112,7 @@ public class SurgicalRobot implements Contract{
     public String drop(String item){
         performAction("Drop!");
         System.out.println("I just dropped the " + item);
-        return("I just dropped the " + item);
+        return("I just dropped the " + item);}
   /**
      * Examines an item
      * @param tool
@@ -119,7 +126,7 @@ public class SurgicalRobot implements Contract{
         if (this.functions.containsKey(item)){
             examine += this.functions.get(item);
         }
-        System.out.println(examine);
+        System.out.println(examine);}
   /**
      * Uses an item
      * @param tool
@@ -229,6 +236,13 @@ public class SurgicalRobot implements Contract{
         }
     }
 
+    public void rest(int sec){
+        try {
+            Thread.sleep(sec);
+        } catch (Exception e) {
+            System.err.println("InterruptedError Exception while at rest. Will resume work in a ");
+        }
+    }
     /**
      * Wakes robot from rest
      */
@@ -246,7 +260,10 @@ public class SurgicalRobot implements Contract{
      * Reveals the tasks the robot can perform
      */
     public void showOptions(){
-        System.out.println(this.name + " can perform the following functions\ngrab()\ndrop()\nexamine()\nuse()\nwalk()\nfly()\nshrink()\ngrow()\nresetSize()\nrest()\nwake()\nshowOptions()\n");
+        rest(1000);
+        System.out.println(this.name + " can perform the following functions:");
+        rest(1000);
+        System.out.println("\ngrab()\ndrop()\nexamine()\nuse()\nwalk()\nfly()\nshrink()\ngrow()\nresetSize()\nrest()\nwake()\nshowOptions()\n");
     }
 
     public String toString(){
@@ -255,36 +272,59 @@ public class SurgicalRobot implements Contract{
 
     public static void main(String[] args) {
         SurgicalRobot OlohIntel = new SurgicalRobot("OlohIntel", 0, 0, 50);
-        SurgicalRobot RAS = new SurgicalRobot("RAS", 0.0, 0.0, 20.0);
-        System.out.println(OlohIntel);
+        System.out.println(OlohIntel); //Prints out robot's description
         System.out.println(); //Prints an empty line
+        System.out.println("Do you want to invoke the showOptions?: Enter Yes or No");
+        while (OlohIntel.input.nextLine().toLowerCase().equals("no")){ //Doesn't allow program to proceed if user doesn't agree to see options
+            System.out.println("Enter YES to proceed. You can't use me without seeing my options");// Question: I would love to allow the user quit using quit(). How do I implement that?
+        }    
         OlohIntel.showOptions();
-        OlohIntel.grab("forceps");
-        OlohIntel.examine("forceps");
-        OlohIntel.drop("forceps");
-        OlohIntel.grab("forceps");
-        System.out.println("Do you want to use OlohIntel?");
-        OlohIntel.input.nextLine();
-        OlohIntel.use("forceps");
-        System.out.println("--------------------------");
-        System.out.println("OlohIntel needs to walk to perform her function\nShould she walk in a specific cardinal direction or according to a coordinate?\n............Enter Cardinal or Coordinate");
-        if (OlohIntel.input.nextLine().toLowerCase().equals("cardinal")){ //while loop
-            System.out.println("Enter direction: right/left/forward/backward");
-            String direction = OlohIntel.input.nextLine().toLowerCase();
-            OlohIntel.walk(direction);
-            System.out.println("--------------------------");}
-        else if ((OlohIntel.input.nextLine().toLowerCase().equals("coordinate"))){
-            System.out.println("Enter x coordinate");
-            double x = OlohIntel.input.nextInt();
-            System.out.println("Enter y coordinate");
-            double y = OlohIntel.input.nextInt();
-            OlohIntel.walk(x, y);
-        }
+        OlohIntel.rest(1000); //Pauses program for 1s ot make it more real
+        System.out.println("I'mma grab an equipment to start work. What equipment do you want to use?");
+        String equipment = OlohIntel.input.nextLine(); //Passes equipment to be used to the variable equipment
+        OlohIntel.rest(1000);
+        OlohIntel.grab(equipment); //Implements grab method
+        OlohIntel.rest(1000);
+        System.out.println("--------Let's start by examining " + equipment + "---------");
+        OlohIntel.rest(1000);
+        OlohIntel.examine(equipment); //Implements examine method
+        //OlohIntel.drop("forceps"); Add to the end of the code
+        OlohIntel.rest(1000);
+        System.out.println("Confirm you want to use OlohIntel in the surgery.....\nYES OR NO");
+        String use = OlohIntel.input.nextLine().toLowerCase(); //use as a unique varaible to store user's response in preparation for invoking the use() method
+        if (use.equals("no")){
+            OlohIntel.rest(1000);
+            System.out.println("Okay, bye!");}
+
         else{
-            throw new RuntimeException("Cardinal or Coordinate? Reenter");
-        }
+            OlohIntel.rest(1000);
+            OlohIntel.use(equipment); //Implements the use() method
+            System.out.println("--------------------------");
+            OlohIntel.rest(1000);
+            System.out.println("OlohIntel needs to walk to perform her function\nShould she walk in a specific cardinal direction or according to a coordinate?\n............Enter Cardinal or Coordinate");
+            String walkType = OlohIntel.input.nextLine().toLowerCase(); //Unique variable to store user's response in prep for invoking the walk() method
+            OlohIntel.rest(1000);
+            while (!(walkType.equals("cardinal") | walkType.equals("coordinate"))){
+                System.out.println("Cardinal or Coordinate? Reenter!");} //Allows user to select which of the overloaded methods to use
+                if (walkType.equals("cardinal")){  
+                    //Runs if user prefers cardinal directions
+                    System.out.println("Enter direction: right/left/forward/backward");
+                    String direction = OlohIntel.input.nextLine().toLowerCase();
+                    OlohIntel.rest(1000);
+                    OlohIntel.walk(direction);
+                    System.out.println("--------------------------");}
+                else if ((walkType.equals("coordinate"))){ 
+                    //Runs if user prefers coordinate directions
+                    System.out.println("Enter x coordinate"); 
+                    double x = OlohIntel.input.nextInt();
+                    OlohIntel.rest(1000);
+                    System.out.println("Enter y coordinate");
+                    double y = OlohIntel.input.nextInt();
+                    OlohIntel.rest(1000);
+                    OlohIntel.walk(x, y); }}
+        //Will invoke these in my game
         
-        // OlohIntel.fly(5, 5);
+        // OlohIntel.fly(5, 5); //Will invoke these in my game
         // OlohIntel.shrink();
         // OlohIntel.grow();
         // OlohIntel.resetSize();
