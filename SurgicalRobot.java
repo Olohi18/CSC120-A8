@@ -280,7 +280,7 @@ public class SurgicalRobot implements Contract{
         }    
         OlohIntel.showOptions();
         OlohIntel.rest(1000); //Pauses program for 1s ot make it more real
-        System.out.println("I'mma grab an equipment to start work. What equipment do you want to use?");
+        System.out.println("I'mma grab an equipment to start work. What equipment do you want to use? Enter any medical device");
         String equipment = OlohIntel.input.nextLine(); //Passes equipment to be used to the variable equipment
         OlohIntel.rest(1000);
         OlohIntel.grab(equipment); //Implements grab method
@@ -322,19 +322,18 @@ public class SurgicalRobot implements Contract{
                     double y = OlohIntel.input.nextInt();
                     OlohIntel.rest(1000);
                     OlohIntel.walk(x, y); }}
-        //Will invoke these in my game
-        
-        // OlohIntel.fly(5, 5); //Will invoke these in my game
-        // OlohIntel.shrink();
-        // OlohIntel.grow();
-        // OlohIntel.resetSize();
-        // OlohIntel.rest();
-        // OlohIntel.wake();
-        
-        //System.out.println(OlohIntel.actions);
-//         OlohIntel.undo();
-//         OlohIntel.rest();
-//         OlohIntel.fly(2,3);
+                    
+                    OlohIntel.fly(5, 5); //Will invoke these in my game
+                    OlohIntel.shrink();
+                    OlohIntel.grow();
+                    OlohIntel.resetSize();
+                    OlohIntel.rest();
+                    OlohIntel.wake();
+                    
+                    System.out.println(OlohIntel.actions);
+                    OlohIntel.undo();
+                    OlohIntel.rest();
+                    OlohIntel.fly(2,3);
         }
 
 
