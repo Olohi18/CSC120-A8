@@ -240,7 +240,7 @@ public class SurgicalRobot implements Contract{
         try {
             Thread.sleep(sec);
         } catch (Exception e) {
-            System.err.println("InterruptedError Exception while at rest. Will resume work in a ");
+            System.err.println("InterruptedError Exception while at rest. Will resume work in a few seconds. ");
         }
     }
     /**
